@@ -35,10 +35,15 @@ class Move
 end
 
 class Player
-  attr_accessor :move, :name
+  attr_accessor :move, :name, :score
 
   def initialize
     set_name
+    @score = 0
+  end
+
+  def increase_score
+    @score += 1
   end
 end
 
@@ -99,9 +104,11 @@ class RPSGame
 
   def display_winner
     if human.move > computer.move
-      puts "#{human.name} won!"
+      human.increase_score
+      puts "#{human.name} won! Your score is #{human.score}"
     elsif human.move < computer.move
-      puts "#{computer.name} won!"
+      computer.increase_score
+      puts "#{computer.name} won! Computer score is #{computer.score}"
     else
       puts "It's a tie!"
     end
@@ -116,8 +123,15 @@ class RPSGame
       puts "Sorry, must be y or n."
     end
 
-    return false if answer.casecmp('y')
-    return true if answer.casecmp('y')
+    return false if answer == 'n'
+    return true if answer == 'y'
+  end
+
+  def won_10?
+    if human.score == 10 || computer.score == 10
+      return true
+    end
+    return false
   end
 
   def play
@@ -128,6 +142,7 @@ class RPSGame
       computer.choose
       display_moves
       display_winner
+      break if won_10?
       break unless play_again?
     end
     display_goodbye_message
