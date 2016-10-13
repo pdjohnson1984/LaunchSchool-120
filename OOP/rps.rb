@@ -1,4 +1,6 @@
 class Move
+  attr_reader :value
+
   VALUES = ['rock', 'paper', 'scissors', 'lizard', 'spock'].freeze
 
   def initialize(value)
@@ -47,11 +49,12 @@ class Move
 end
 
 class Player
-  attr_accessor :move, :name, :score
+  attr_accessor :move, :name, :score, :move_history
 
   def initialize
     set_name
     @score = 0
+    @move_history = []
   end
 
   def increase_score
@@ -80,6 +83,7 @@ class Human < Player
       puts "Sorry, invalid choice."
     end
     self.move = Move.new(choice)
+    self.move_history << self.move.value
   end
 end
 
@@ -90,6 +94,7 @@ class Computer < Player
 
   def choose
     self.move = Move.new(Move::VALUES.sample)
+    self.move_history << move.value
   end
 end
 
@@ -110,8 +115,10 @@ class RPSGame
   end
 
   def display_moves
-    puts "#{human.name} chose #{human.move}."
-    puts "#{computer.name} chose #{computer.move}."
+    puts "#{human.name} chose #{human.move}. Your previous moves are
+    #{human.move_history.join(", ")}."
+    puts "#{computer.name} chose #{computer.move}. Computer previous moves are
+    #{computer.move_history.join(", ")}."
   end
 
   def display_winner
