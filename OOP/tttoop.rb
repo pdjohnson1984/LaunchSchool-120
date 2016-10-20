@@ -3,8 +3,8 @@ class Board
                   [[1, 4, 7], [2, 5, 8], [3, 6, 9]] +
                   [[1, 5, 9], [3, 5, 7]]
   def initialize
-     @squares = {}
-     reset
+    @squares = {}
+    reset
   end
 
   def []=(num, marker)
@@ -12,7 +12,7 @@ class Board
   end
 
   def unmarked_keys
-    @squares.keys.select { |key| @squares[key].unmarked?}
+    @squares.keys.select { |key| @squares[key].unmarked? }
   end
 
   def full?
@@ -35,9 +35,10 @@ class Board
   end
 
   def reset
-    (1..9).each { |key| @squares[key] = Square.new}
+    (1..9).each { |key| @squares[key] = Square.new }
   end
 
+  # rubocop:disable Metrics/AbcSize
   def draw
     puts "     |     |"
     puts "  #{@squares[1]}  |  #{@squares[2]}  |  #{@squares[3]}"
@@ -51,6 +52,7 @@ class Board
     puts "  #{@squares[7]}  |  #{@squares[8]}  |  #{@squares[9]}"
     puts "     |     |"
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
 
@@ -62,7 +64,7 @@ class Board
 end
 
 class Square
-  INITIAL_MARKER = " "
+  INITIAL_MARKER = " ".freeez
 
   attr_accessor :marker
 
@@ -94,8 +96,8 @@ end
 class TTTGame
   attr_reader :board, :human, :computer
 
-  HUMAN_MARKER = "X"
-  COMPUTER_MARKER = "0"
+  HUMAN_MARKER = "X".freeze
+  COMPUTER_MARKER = "0".freeze
   FIRST_TO_MOVE = HUMAN_MARKER
 
   def initialize
@@ -104,7 +106,6 @@ class TTTGame
     @computer = Player.new(COMPUTER_MARKER)
     @current_marker = FIRST_TO_MOVE
   end
-
 
   def play
     display_welcome_message
