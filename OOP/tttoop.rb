@@ -23,12 +23,6 @@ class Board
     !!winning_marker
   end
 
-  def three_identical_markers?(squares)
-    markers = squares.select(&:marked?).collect(&:marker)
-    return false if markers.size != 3
-    markers.min == markers.max
-  end
-
   # returns winning marker or nil
   def winning_marker
     WINNING_LINES.each do |line|
@@ -56,6 +50,14 @@ class Board
     puts "     |     |"
     puts "  #{@squares[7]}  |  #{@squares[8]}  |  #{@squares[9]}"
     puts "     |     |"
+  end
+
+  private
+
+  def three_identical_markers?(squares)
+    markers = squares.select(&:marked?).collect(&:marker)
+    return false if markers.size != 3
+    markers.min == markers.max
   end
 end
 
