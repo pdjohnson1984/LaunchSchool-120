@@ -64,7 +64,7 @@ class Board
 end
 
 class Square
-  INITIAL_MARKER = " ".freeez
+  INITIAL_MARKER = " ".freeze
 
   attr_accessor :marker
 
@@ -90,6 +90,15 @@ class Player
 
   def initialize(marker)
     @marker = marker
+    @score = 0
+  end
+
+  def won
+    @score += 1
+  end
+
+  def won_5?
+    @score == 5
   end
 end
 
@@ -169,21 +178,36 @@ class TTTGame
 
     case board.winning_marker
     when HUMAN_MARKER
-      puts "You won!"
+      @human.won
+      display_result_message("human")
     when COMPUTER_MARKER
-      puts "Computer won!"
+      @computer.won
+      display_result_message("computer")
     else
-      puts "It's a tie1"
+      puts "It's a tie!"
+    end
+  end
+
+  def display_result_message(winner)
+    if winner == "human"
+      puts "You won 5! Game over!" if @human.won_5?
+      puts "You won!" if !@human.won_5?
+    else
+      puts "Computer won 5! Game over!" if @computer.won_5?
+      puts "Computer won!" if !@computer.won_5?
     end
   end
 
   def play_again?
     answer = nil
-    loop do
-      puts "Would you like to play again? (y/n)?"
-      answer = gets.chomp.downcase
-      break if %w(y n).include? answer
-      puts "Sorry, must be y or n"
+
+    if !@human.won_5? && !@computer.won_5?
+      loop do
+        puts "Would you like to play again? (y/n)?"
+        answer = gets.chomp.downcase
+        break if %w(y n).include? answer
+        puts "Sorry, must be y or n"
+      end
     end
 
     answer == 'y'
